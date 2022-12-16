@@ -1,45 +1,47 @@
-var form = document.getElementById('addForm');
-var itemList = document.getElementById('items');
-
+var form = document.getElementById("addForm");
+var itemList = document.getElementById("items");
 // Form submit event
-form.addEventListener('submit', addItem);
+form.addEventListener("submit", addItem);
 // Delete event
-itemList.addEventListener('click', removeItem);
+itemList.addEventListener("click", removeItem);
+// Filter event
+filter.addEventListener("keyup", filterItems);
 
 // Add item
-function addItem(e){
+function addItem(e) {
   e.preventDefault();
 
   // Get input value
-  var newItem = document.getElementById('item').value;
-
+  var newItem = document.getElementById("item").value;
+  var itemDescription = document.getElementById("description").value;
   // Create new li element
-  var li = document.createElement('li');
+  var li = document.createElement("li");
   // Add class
-  li.className = 'list-group-item';
+  li.className = "list-group-item";
   // Add text node with input value
   li.appendChild(document.createTextNode(newItem));
-
+  li.appendChild(document.createElement("br"));
+  li.appendChild(document.createTextNode(itemDescription));
   // Create del button element
-  var deleteBtn = document.createElement('button');
+  var deleteBtn = document.createElement("button");
 
   // Add classes to del button
-  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+  deleteBtn.className = "btn btn-danger btn-sm float-right delete";
 
   // Append text node
-  deleteBtn.appendChild(document.createTextNode('X'));
+  deleteBtn.appendChild(document.createTextNode("X"));
 
   // Append button to li
   li.appendChild(deleteBtn);
 
   //create edit button
-  var editBtn = document.createElement('button');
+  var editBtn = document.createElement("button");
 
   //Add class to edit button
-  editBtn.className = 'btn btn-primary a-btn-slide-text btn-sm float-right';
+  editBtn.className = "btn btn-primary a-btn-slide-text btn-sm float-right";
 
   //append text node
-  editBtn.appendChild(document.createTextNode('Edit'));
+  editBtn.appendChild(document.createTextNode("Edit"));
 
   //append button to li
   li.appendChild(editBtn);
@@ -49,9 +51,30 @@ function addItem(e){
 }
 
 // Remove item
-function removeItem(e){
-  if(e.target.classList.contains('delete')){
-      var li = e.target.parentElement;
-      itemList.removeChild(li);
+function removeItem(e) {
+  if (e.target.classList.contains("delete")) {
+    var li = e.target.parentElement;
+    itemList.removeChild(li);
   }
+}
+
+// Filter Items
+function filterItems(e) {
+  // convert text to lowercase
+  var text = e.target.value.toLowerCase();
+  // Get lis
+  var items = itemList.getElementsByTagName("li");
+  // Convert to an array
+  Array.from(items).forEach(function (item) {
+    var itemName = item.firstChild.textContent;
+    var descName = item.lastChild.textContent;
+    if (
+      itemName.toLowerCase().indexOf(text) != -1 ||
+      descName.toLowerCase().indexOf(text) != -1
+    ) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
 }
